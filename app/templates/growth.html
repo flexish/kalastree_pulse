@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Business Growth · {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', path='css/growth.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="growth">
+  <section class="admin__header glass">
+    <div>
+      <h1 class="admin__title">Business Growth</h1>
+      <p class="admin__subtitle">The real numbers behind Kalastree's tree.</p>
+    </div>
+  </section>
+
+  <section class="stat-grid">
+    {% for tile in kpi_tiles %}
+    <div class="stat-card glass">
+      <span class="stat-card__label">{{ tile.label }}</span>
+      <span class="stat-card__value">{{ tile.value_display }}</span>
+      {% if tile.pct is not none %}
+      <div class="progress-bar">
+        <div class="progress-bar__fill" style="width: {{ tile.pct }}%;"></div>
+      </div>
+      <span class="stat-card__hint">{{ tile.pct }}% of {{ tile.target_display }} target</span>
+      {% else %}
+      <span class="stat-card__hint">No target set — tracked for tree growth</span>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </section>
+
+  {% include "partials/tree.html" %}
+
+  <section class="admin__card glass">
+    <h2 class="admin__card-title">What's driving the tree's growth</h2>
+    {% if tree_state.total_unlocked == 0 %}
+    <p class="admin__card-empty">
+      No growth milestones unlocked yet. Update KPI values, or wait for
+      today's reflections — see <code>config/tree_rules.json</code> for
+      what triggers each one.
+    </p>
+    {% else %}
+    <div class="growth__rules-grid">
+      {% for element, label in [("leaves", "🍃 Leaves"), ("branches", "🌿 Branches"), ("flowers", "🌸 Flowers"), ("fruits", "🍎 Fruits"), ("birds", "🐦 Birds")] %}
+      {% set descriptions = tree_state.unlocked_descriptions.get(element, []) %}
+      {% if descriptions %}
+      <div class="growth__rule-group">
+        <h3 class="growth__rule-label">{{ label }}</h3>
+        <ul class="growth__rule-list">
+          {% for description in descriptions %}
+          <li>{{ description }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

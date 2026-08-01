@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Sign in · {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/auth.css') }}" />
+{% endblock %}
+
+{% block content %}
+<section class="auth">
+  <form
+    class="auth__card glass{% if error %} auth__card--shake{% endif %}"
+    method="post"
+    action="/login"
+  >
+    <span class="auth__mark" aria-hidden="true">🌳</span>
+    <h1 class="auth__title">Welcome to {{ app_name }}</h1>
+    <p class="auth__subtitle">Enter your name to check in for today.</p>
+
+    <label class="auth__label" for="name">Your name</label>
+    <input
+      class="auth__input{% if error %} auth__input--error{% endif %}"
+      type="text"
+      id="name"
+      name="name"
+      placeholder="e.g. Asha Verma"
+      value="{{ name or '' }}"
+      autocomplete="name"
+      autofocus
+      required
+      minlength="2"
+      maxlength="50"
+    />
+    {% if error %}
+    <p class="auth__error" role="alert">{{ error }}</p>
+    {% endif %}
+
+    <button class="btn btn--primary auth__submit" type="submit" data-loading-text="Signing in…">
+      Continue
+    </button>
+  </form>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', path='js/auth.js') }}" defer></script>
+{% endblock %}

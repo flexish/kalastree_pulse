@@ -1,0 +1,257 @@
+/* ==========================================================================
+   Kalastree Pulse — daily reflection styles
+   ========================================================================== */
+
+.reflect {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.reflect__card {
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.reflect__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+/* --- Rating slider ----------------------------------------------------------- */
+.reflect__slider-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.reflect__emoji {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.reflect__emoji.bump {
+  animation: emoji-bump 0.25s ease;
+}
+
+@keyframes emoji-bump {
+  0% {
+    transform: scale(0.85);
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.reflect__slider {
+  --fill-percent: 55%;
+  --fill-color: var(--color-primary);
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--fill-color) 0%,
+    var(--fill-color) var(--fill-percent),
+    var(--color-border) var(--fill-percent),
+    var(--color-border) 100%
+  );
+  outline: none;
+  cursor: pointer;
+}
+
+.reflect__slider::-webkit-slider-thumb {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid var(--fill-color);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+.reflect__slider::-webkit-slider-thumb:hover {
+  transform: scale(1.08);
+}
+
+.reflect__slider::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid var(--fill-color);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+
+.reflect__slider::-moz-range-track {
+  height: 10px;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.reflect__slider-scale {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--color-text-faint);
+}
+
+.reflect__slider-label {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-text);
+  transition: color 0.15s ease;
+}
+
+/* --- Text fields --------------------------------------------------------- */
+.reflect__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.reflect__field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.reflect__field textarea {
+  width: 100%;
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border-strong);
+  background: var(--color-input-bg);
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--color-text);
+  resize: vertical;
+  min-height: 64px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.reflect__field textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+}
+
+.reflect__field textarea.has-error {
+  border-color: #ef4444;
+}
+
+.reflect__error {
+  font-size: 0.78rem;
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.reflect__submit {
+  width: 100%;
+}
+
+/* --- Loading overlay ---------------------------------------------------------
+   Shown the instant the form submits, covering the round-trip to the
+   server. A real page navigation follows, so it never needs to be hidden
+   manually — the browser replaces the DOM when the next page arrives. */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(238, 244, 255, 0.85);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 100;
+}
+
+.loading-overlay.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.loading-overlay__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.loading-overlay__tree {
+  font-size: 3rem;
+  animation: loading-pulse 1s ease-in-out infinite;
+}
+
+.loading-overlay__content p {
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+@keyframes loading-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-overlay__tree {
+    animation: none;
+  }
+}
+
+/* --- Success / already-done screens ----------------------------------------- */
+.reflect-status {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-5);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.reflect-status__icon {
+  font-size: 3rem;
+}
+
+.reflect-status h1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.reflect-status p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  max-width: 40ch;
+}

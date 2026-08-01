@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Mission · {{ app_name }}{% endblock %}
+
+{% block body_class %}has-animated-bg{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', path='css/mission.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="mission">
+  <section class="mission__hero glass">
+    <p class="mission__eyebrow">The Mission</p>
+    <h1 class="mission__name">{{ goals.NAME }}</h1>
+    <div class="mission__countdown">
+      <span class="mission__countdown-number" data-countup data-target="{{ progress.days_left }}">0</span>
+      <span class="mission__countdown-label">days left</span>
+    </div>
+    <p class="mission__deadline">Target date: {{ progress.deadline_display }}</p>
+  </section>
+
+  <section class="mission__revenue glass">
+    <div class="mission__revenue-figures">
+      <div class="mission__figure">
+        <span class="mission__figure-label">Target</span>
+        <span class="mission__figure-value">{{ progress.revenue_target_display }}</span>
+      </div>
+      <div class="mission__figure">
+        <span class="mission__figure-label">Current</span>
+        <span class="mission__figure-value">{{ progress.revenue_current_display }}</span>
+      </div>
+      <div class="mission__figure">
+        <span class="mission__figure-label">Remaining</span>
+        <span class="mission__figure-value">{{ remaining_display }}</span>
+      </div>
+    </div>
+    <div class="progress-bar mission__progress-bar">
+      <div
+        class="progress-bar__fill"
+        style="width: 0%;"
+        data-progress-fill
+        data-target-width="{{ progress.revenue_pct }}"
+      ></div>
+    </div>
+    <p class="mission__completion">
+      <span data-countup data-target="{{ progress.revenue_pct }}">0</span>% complete
+    </p>
+  </section>
+
+  <div class="mission__growth-grid">
+    {% include "partials/tree.html" %}
+
+    <section class="tree-card glass mission__forest">
+      <span class="tree-card__stage-badge">🌲 Forest Growth</span>
+      <div class="mission__forest-trees" aria-hidden="true">
+        {% if tree_state.forest_size == 0 %}
+        <span class="mission__forest-tree mission__forest-tree--empty">🌱</span>
+        {% else %}
+        {% for _ in range(tree_state.forest_size) %}
+        <span class="mission__forest-tree">🌳</span>
+        {% endfor %}
+        {% endif %}
+      </div>
+      <p class="tree-card__caption">
+        {% if tree_state.total_reflections == 0 %}
+        The forest grows with every reflection the team submits — none yet.
+        {% else %}
+        {{ tree_state.total_reflections }} reflection{{ "s" if tree_state.total_reflections != 1 else "" }}
+        submitted so far — one small tree for every five.
+        {% endif %}
+      </p>
+    </section>
+  </div>
+
+  <section class="mission__milestones glass">
+    <h2 class="mission__milestones-title">Milestones</h2>
+    {% if milestones %}
+    <ul class="mission__milestone-list">
+      {% for milestone in milestones %}
+      <li>✅ {{ milestone }}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="mission__milestones-empty">
+      No milestones unlocked yet — every KPI update and reflection moves this forward.
+    </p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', path='js/mission.js') }}" defer></script>
+{% endblock %}

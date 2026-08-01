@@ -1,0 +1,17 @@
+# Never bake secrets or local state into the image.
+.env
+.env.*
+credentials/*.json
+
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+logs/*.log*
+
+.git/
+.gitignore
+
+.claude/
+node_modules/

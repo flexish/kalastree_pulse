@@ -1,0 +1,26 @@
+{
+  "leaves": [
+    { "kpi": "participation_today_pct", "threshold": 1, "description": "Someone reflected today" },
+    { "kpi": "participation_today_pct", "threshold": 100, "description": "100% team participation today" }
+  ],
+  "branches": [
+    { "kpi": "orders", "threshold": 10, "description": "10 orders completed" },
+    { "kpi": "products_listed", "threshold": 20, "description": "20 products listed" }
+  ],
+  "flowers": [
+    { "kpi": "women_artisans", "threshold": 5, "description": "5 women artisans onboarded" },
+    { "kpi": "women_artisans", "threshold": 20, "description": "20 women artisans onboarded" },
+    { "kpi": "repeat_customers", "threshold": 10, "description": "10 repeat customers" },
+    { "kpi": "social_followers", "threshold": 1000, "description": "1,000 social followers" }
+  ],
+  "fruits": [
+    { "kpi": "orders", "threshold": 25, "description": "25 orders completed" },
+    { "kpi": "orders", "threshold": 100, "description": "100 orders completed" },
+    { "kpi": "revenue", "threshold": 100000, "description": "₹1,00,000 in revenue" },
+    { "kpi": "website_visitors", "threshold": 5000, "description": "5,000 website visitors" }
+  ],
+  "birds": [
+    { "kpi": "mission_progress_pct", "threshold": 50, "description": "Halfway to the mission goal" },
+    { "kpi": "partnerships", "threshold": 3, "description": "3 partnerships formed" }
+  ]
+}

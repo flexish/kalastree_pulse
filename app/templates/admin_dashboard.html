@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard · {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="admin">
+  <section class="admin__header glass">
+    <div>
+      <h1 class="admin__title">Admin Dashboard</h1>
+      <p class="admin__subtitle">
+        {% if stats.has_data %}
+        Based on {{ stats.total_reflections }} reflection{{ "s" if stats.total_reflections != 1 else "" }} recorded so far.
+        {% else %}
+        No reflections recorded yet.
+        {% endif %}
+      </p>
+    </div>
+    <div class="admin__header-actions">
+      <a class="link-btn" href="/admin/analytics">View analytics →</a>
+      <a class="link-btn" href="/admin/insights">AI insights →</a>
+      <form method="post" action="/admin/logout">
+        <button class="link-btn" type="submit">Exit admin view</button>
+      </form>
+    </div>
+  </section>
+
+  {% if not stats.has_data %}
+  <section class="admin__empty glass">
+    <span class="admin__empty-icon" aria-hidden="true">📊</span>
+    <h2>No data yet</h2>
+    <p>
+      Stats appear here once reflections start coming in through a connected
+      Google Sheet — see the README's "Setting up Google Sheets" section.
+    </p>
+  </section>
+  {% else %}
+
+  <section class="admin__card glass">
+    <h2 class="admin__card-title">Average Rating</h2>
+    <div class="rating-bars">
+      <div class="rating-bar">
+        <span class="rating-bar__label">Today</span>
+        <div class="rating-bar__track">
+          <div
+            class="rating-bar__fill"
+            style="width: {{ ((stats.today_avg_rating or 0) / 10 * 100) | round(1) }}%;"
+            title="{{ "%.1f"|format(stats.today_avg_rating) if stats.today_avg_rating is not none else "No data" }}"
+          ></div>
+        </div>
+        <span class="rating-bar__value">{{ "%.1f"|format(stats.today_avg_rating) if stats.today_avg_rating is not none else "—" }}</span>
+      </div>
+      <div class="rating-bar">
+        <span class="rating-bar__label">This week</span>
+        <div class="rating-bar__track">
+          <div
+            class="rating-bar__fill"
+            style="width: {{ ((stats.weekly_avg_rating or 0) / 10 * 100) | round(1) }}%;"
+            title="{{ "%.1f"|format(stats.weekly_avg_rating) if stats.weekly_avg_rating is not none else "No data" }}"
+          ></div>
+        </div>
+        <span class="rating-bar__value">{{ "%.1f"|format(stats.weekly_avg_rating) if stats.weekly_avg_rating is not none else "—" }}</span>
+      </div>
+      <div class="rating-bar">
+        <span class="rating-bar__label">This month</span>
+        <div class="rating-bar__track">
+          <div
+            class="rating-bar__fill"
+            style="width: {{ ((stats.monthly_avg_rating or 0) / 10 * 100) | round(1) }}%;"
+            title="{{ "%.1f"|format(stats.monthly_avg_rating) if stats.monthly_avg_rating is not none else "No data" }}"
+          ></div>
+        </div>
+        <span class="rating-bar__value">{{ "%.1f"|format(stats.monthly_avg_rating) if stats.monthly_avg_rating is not none else "—" }}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="stat-grid admin__meters">
+    <div class="stat-card stat-card--meter glass">
+      <span class="stat-card__label">Participation today</span>
+      <div class="progress-bar">
+        <div class="progress-bar__fill" style="width: {{ stats.participation_pct }}%;"></div>
+      </div>
+      <span class="stat-card__value">{{ stats.participation_pct }}%</span>
+      <span class="stat-card__hint">Of {{ team_size }} team members configured</span>
+    </div>
+    <div class="stat-card stat-card--meter glass">
+      <span class="stat-card__label">7-day completion</span>
+      <div class="progress-bar">
+        <div class="progress-bar__fill" style="width: {{ stats.completion_pct }}%;"></div>
+      </div>
+      <span class="stat-card__value">{{ stats.completion_pct }}%</span>
+      <span class="stat-card__hint">Average daily participation this week</span>
+    </div>
+  </section>
+
+  <section class="admin__card glass">
+    <h2 class="admin__card-title">Need Help</h2>
+    {% if stats.need_help_entries %}
+    <ul class="admin-list">
+      {% for entry in stats.need_help_entries %}
+      <li class="admin-list__item">
+        <div class="admin-list__meta">
+          <span class="admin-list__name">{{ entry.name }}</span>
+          <span class="admin-list__date">{{ entry.timestamp.strftime("%b") }} {{ entry.timestamp.day }}</span>
+        </div>
+        <p class="admin-list__text">{{ entry.need_help }}</p>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="admin__card-empty">No open help requests in the last 30 days.</p>
+    {% endif %}
+  </section>
+
+  <div class="admin__ranked-grid">
+    <section class="admin__card glass">
+      <h2 class="admin__card-title">Top Wins</h2>
+      {% if stats.top_wins %}
+      <ol class="ranked-list">
+        {% for text, count in stats.top_wins %}
+        <li class="ranked-list__item">
+          <span class="ranked-list__text">{{ text }}</span>
+          {% if count > 1 %}<span class="badge badge--accent">×{{ count }}</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <p class="admin__card-empty">Nothing recorded in the last 30 days.</p>
+      {% endif %}
+    </section>
+
+    <section class="admin__card glass">
+      <h2 class="admin__card-title">Top Blockers</h2>
+      {% if stats.top_blockers %}
+      <ol class="ranked-list">
+        {% for text, count in stats.top_blockers %}
+        <li class="ranked-list__item">
+          <span class="ranked-list__text">{{ text }}</span>
+          {% if count > 1 %}<span class="badge badge--accent">×{{ count }}</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <p class="admin__card-empty">Nothing recorded in the last 30 days.</p>
+      {% endif %}
+    </section>
+
+    <section class="admin__card glass">
+      <h2 class="admin__card-title">Common Priorities</h2>
+      {% if stats.top_priorities %}
+      <ol class="ranked-list">
+        {% for text, count in stats.top_priorities %}
+        <li class="ranked-list__item">
+          <span class="ranked-list__text">{{ text }}</span>
+          {% if count > 1 %}<span class="badge badge--accent">×{{ count }}</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <p class="admin__card-empty">Nothing recorded in the last 30 days.</p>
+      {% endif %}
+    </section>
+  </div>
+
+  {% endif %}
+</div>
+{% endblock %}

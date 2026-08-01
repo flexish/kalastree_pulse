@@ -1,0 +1,216 @@
+/* ==========================================================================
+   Kalastree Pulse — analytics page
+   Builds on admin.css / dashboard.css for cards, grids, and badges.
+   ========================================================================== */
+
+/* --- Filter bar --------------------------------------------------------- */
+.analytics-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.analytics-filters__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.analytics-filters__field--grow {
+  flex: 1;
+  min-width: 180px;
+}
+
+.analytics-filters__field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.analytics-filters__field input,
+.analytics-filters__field select {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--color-border-strong);
+  background: var(--color-input-bg);
+  font-size: 0.88rem;
+  font-family: inherit;
+  color: var(--color-text);
+}
+
+.analytics-filters__field input:focus,
+.analytics-filters__field select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+}
+
+/* --- Trend chart --------------------------------------------------------- */
+.analytics-trend__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.analytics-tabs {
+  display: flex;
+  gap: var(--space-1);
+  background: var(--color-border-subtle);
+  border-radius: 999px;
+  padding: 3px;
+}
+
+.analytics-tab {
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.analytics-tab--active {
+  background: var(--color-surface);
+  color: var(--color-primary-dark);
+  box-shadow: var(--shadow-md);
+}
+
+.trend-svg {
+  width: 100%;
+  height: auto;
+  margin-top: var(--space-3);
+}
+
+.trend-gridline {
+  stroke: var(--color-border);
+  stroke-width: 1;
+}
+
+.trend-axis-label {
+  font-size: 9px;
+  fill: var(--color-text-faint);
+}
+
+.trend-line {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.trend-dot {
+  fill: var(--color-primary-dark);
+}
+
+/* --- Heatmap ------------------------------------------------------------- */
+.heatmap {
+  display: flex;
+  gap: 3px;
+  overflow-x: auto;
+  padding-bottom: var(--space-1);
+}
+
+.heatmap__week {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.heatmap__day {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background-color: var(--color-border-subtle);
+}
+
+.heatmap__day--pad {
+  background-color: transparent;
+}
+
+/* --- Response distribution ------------------------------------------------ */
+.distribution {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+  height: 140px;
+  padding-top: var(--space-3);
+}
+
+.distribution__bar-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  gap: var(--space-1);
+}
+
+.distribution__bar {
+  width: 100%;
+  min-height: 2px;
+  border-radius: 4px 4px 0 0;
+  background: var(--color-primary);
+}
+
+.distribution__label {
+  font-size: 0.75rem;
+  color: var(--color-text-faint);
+  font-weight: 600;
+}
+
+/* --- Member table / results table ----------------------------------------- */
+.member-table,
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.member-table th,
+.member-table td,
+.results-table th,
+.results-table td {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.member-table th,
+.results-table th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text-faint);
+  font-weight: 700;
+}
+
+.results-table-wrap {
+  overflow-x: auto;
+}
+
+.member-table tbody tr,
+.results-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.member-table tbody tr:hover,
+.results-table tbody tr:hover {
+  background-color: var(--color-border-subtle);
+}
+
+.results-table {
+  min-width: 900px;
+}
+
+.results-table__truncate {
+  max-width: 160px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--color-text-muted);
+}

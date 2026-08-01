@@ -1,0 +1,34 @@
+/* ==========================================================================
+   Kalastree Pulse — business growth page
+   Builds on admin.css / dashboard.css rather than redefining their cards,
+   grids, and progress bars.
+   ========================================================================== */
+
+.growth {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.growth__rules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-4);
+}
+
+.growth__rule-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+}
+
+.growth__rule-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}

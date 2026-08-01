@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Access · {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/auth.css') }}" />
+{% endblock %}
+
+{% block content %}
+<section class="auth">
+  <form
+    class="auth__card glass{% if error %} auth__card--shake{% endif %}"
+    method="post"
+    action="/admin/login"
+  >
+    <span class="auth__mark" aria-hidden="true">🔒</span>
+    <h1 class="auth__title">Admin Access</h1>
+    <p class="auth__subtitle">Enter the admin password to view company-wide stats.</p>
+
+    <label class="auth__label" for="password">Password</label>
+    <input
+      class="auth__input{% if error %} auth__input--error{% endif %}"
+      type="password"
+      id="password"
+      name="password"
+      autocomplete="current-password"
+      autofocus
+      required
+    />
+    {% if error %}
+    <p class="auth__error" role="alert">{{ error }}</p>
+    {% endif %}
+
+    <button class="btn btn--primary auth__submit" type="submit" data-loading-text="Unlocking…">
+      Unlock
+    </button>
+  </form>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', path='js/auth.js') }}" defer></script>
+{% endblock %}

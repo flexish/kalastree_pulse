@@ -1,0 +1,211 @@
+/* ==========================================================================
+   Kalastree Pulse — admin dashboard styles
+   Builds on dashboard.css's .stat-card / .stat-grid / .progress-bar and
+   base.css's .glass / .badge rather than redefining them.
+   ========================================================================== */
+
+.admin {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.admin__header {
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.admin__header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.admin__title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.admin__subtitle {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.admin__empty {
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-5);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.admin__empty-icon {
+  font-size: 2.5rem;
+}
+
+.admin__empty p {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  max-width: 44ch;
+}
+
+.admin__card {
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  transition: box-shadow 0.2s ease;
+}
+
+.admin__card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.admin__card-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.admin__card-empty {
+  color: var(--color-text-faint);
+  font-size: 0.85rem;
+}
+
+/* --- Average rating bars -----------------------------------------------------
+   A single series (rating) across three time-window categories — one hue,
+   no legend needed since each bar is directly labeled. */
+.rating-bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.rating-bar {
+  display: grid;
+  grid-template-columns: 80px 1fr 40px;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rating-bar__label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.rating-bar__track {
+  height: 12px;
+  border-radius: 999px;
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.rating-bar__fill {
+  height: 100%;
+  min-width: 4px;
+  border-radius: 999px;
+  background: var(--color-primary);
+  transition: width 0.6s ease;
+}
+
+.rating-bar__value {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-align: right;
+  color: var(--color-text);
+}
+
+/* --- Meter tiles (participation / completion) -------------------------------- */
+.stat-card--meter {
+  gap: var(--space-2);
+}
+
+.stat-card--meter .progress-bar {
+  margin: var(--space-1) 0;
+}
+
+/* --- Need-help list ------------------------------------------------------------ */
+.admin-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.admin-list__item {
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-list__item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.admin-list__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-1);
+}
+
+.admin-list__name {
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.admin-list__date {
+  font-size: 0.75rem;
+  color: var(--color-text-faint);
+}
+
+.admin-list__text {
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* --- Ranked lists (top wins / blockers / priorities) ---------------------------- */
+.admin__ranked-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.ranked-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.ranked-list__item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: 0.85rem;
+}
+
+.ranked-list__text {
+  color: var(--color-text-muted);
+  line-height: 1.4;
+}
+
+@media (max-width: 480px) {
+  .rating-bar {
+    grid-template-columns: 64px 1fr 36px;
+  }
+}

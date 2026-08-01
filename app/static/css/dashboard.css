@@ -1,0 +1,280 @@
+/* ==========================================================================
+   Kalastree Pulse — home dashboard styles
+   ========================================================================== */
+
+.dashboard {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* --- Intro / greeting + quote ---------------------------------------------- */
+.dashboard__intro {
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.dashboard__greeting {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.dashboard__date {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.dashboard__quote {
+  border-left: 3px solid var(--color-primary);
+  padding-left: var(--space-3);
+  font-style: italic;
+  color: var(--color-text-muted);
+}
+
+.dashboard__quote cite {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 600;
+  color: var(--color-text-faint);
+}
+
+/* --- Tree card --------------------------------------------------------------- */
+.tree-card {
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tree-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.tree-card__stage-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  background: rgba(34, 197, 94, 0.12);
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+}
+
+.tree-visual {
+  width: 160px;
+}
+
+.tree-svg {
+  width: 100%;
+  height: auto;
+}
+
+.tree-ground {
+  fill: rgba(34, 197, 94, 0.15);
+}
+
+.tree-trunk {
+  fill: #a97c50;
+}
+
+.tree-foliage {
+  transform-origin: 100px 175px;
+  animation: tree-sway 6s ease-in-out infinite;
+}
+
+.tree-leaf {
+  fill: var(--color-primary);
+}
+
+.tree-leaf--2,
+.tree-leaf--3 {
+  fill: var(--color-primary-dark);
+  opacity: 0.9;
+}
+
+.tree-leaf--extra {
+  fill: var(--color-primary);
+  opacity: 0.85;
+}
+
+.tree-branch {
+  stroke: #a97c50;
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+.tree-branch-leaf {
+  fill: var(--color-primary-dark);
+}
+
+.tree-flower {
+  fill: #f472b6;
+}
+
+.tree-fruit {
+  fill: #f97316;
+}
+
+.tree-bird {
+  fill: none;
+  stroke: var(--color-text-muted);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@keyframes tree-sway {
+  0%,
+  100% {
+    transform: rotate(-1.5deg);
+  }
+  50% {
+    transform: rotate(1.5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tree-foliage {
+    animation: none;
+  }
+}
+
+.tree-card__caption {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  max-width: 40ch;
+}
+
+/* --- Mission card ------------------------------------------------------------ */
+.dashboard__mission {
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.dashboard__mission-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.dashboard__mission-header h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.badge--accent {
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--color-accent);
+}
+
+.progress-bar {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--color-border);
+  overflow: hidden;
+}
+
+.progress-bar__fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  transition: width 0.6s ease;
+}
+
+.dashboard__mission-figures {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.dashboard__mission-deadline {
+  font-size: 0.8rem;
+  color: var(--color-text-faint);
+}
+
+/* --- Quick stats -------------------------------------------------------------- */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-3);
+}
+
+.stat-card {
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.stat-card__value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--color-text);
+}
+
+.stat-card__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.stat-card__hint {
+  font-size: 0.72rem;
+  color: var(--color-text-faint);
+}
+
+/* --- CTA ------------------------------------------------------------------ */
+.dashboard__cta {
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  text-align: center;
+}
+
+.dashboard__cta-icon {
+  font-size: 2rem;
+}
+
+.dashboard__cta-prompt {
+  font-weight: 600;
+}
+
+.dashboard__cta-note {
+  font-size: 0.8rem;
+  color: var(--color-text-faint);
+}
+
+@media (max-width: 480px) {
+  .dashboard__mission-figures {
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+}

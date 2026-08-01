@@ -1,0 +1,43 @@
+{% set leaf_slots = [(100, 76, 8), (56, 108, 8), (144, 108, 8)] %}
+{% set branch_slots = [
+  (94, 148, 38, 162, 38, 162, 13),
+  (106, 148, 162, 162, 162, 162, 13)
+] %}
+{% set flower_slots = [(85, 90, 6), (115, 90, 6), (65, 135, 6), (135, 135, 6)] %}
+{% set fruit_slots = [(100, 95, 6), (100, 140, 6), (60, 120, 6), (140, 120, 6)] %}
+{% set bird_slots = [
+  "M40,50 q6,-10 12,0 q6,-10 12,0",
+  "M124,42 q6,-10 12,0 q6,-10 12,0"
+] %}
+<svg viewBox="0 0 200 220" class="tree-svg">
+  <ellipse class="tree-ground" cx="100" cy="205" rx="70" ry="10" />
+
+  {% for x1, y1, x2, y2, lx, ly, lr in branch_slots[:tree_state.branch_count] %}
+  <line class="tree-branch" x1="{{ x1 }}" y1="{{ y1 }}" x2="{{ x2 }}" y2="{{ y2 }}" style="animation-delay: {{ 1.0 + loop.index0 * 0.12 }}s" />
+  <circle class="tree-leaf tree-branch-leaf" cx="{{ lx }}" cy="{{ ly }}" r="{{ lr }}" style="animation-delay: {{ 1.1 + loop.index0 * 0.12 }}s" />
+  {% endfor %}
+
+  <rect class="tree-trunk" x="94" y="140" width="12" height="65" rx="4" />
+
+  <g class="tree-foliage">
+    <circle class="tree-leaf tree-leaf--1" cx="100" cy="110" r="34" />
+    <circle class="tree-leaf tree-leaf--2" cx="72" cy="130" r="24" />
+    <circle class="tree-leaf tree-leaf--3" cx="128" cy="130" r="24" />
+
+    {% for x, y, r in leaf_slots[:tree_state.leaf_count] %}
+    <circle class="tree-leaf tree-leaf--extra" cx="{{ x }}" cy="{{ y }}" r="{{ r }}" style="animation-delay: {{ 1.0 + loop.index0 * 0.12 }}s" />
+    {% endfor %}
+
+    {% for x, y, r in flower_slots[:tree_state.flower_count] %}
+    <circle class="tree-flower" cx="{{ x }}" cy="{{ y }}" r="{{ r }}" style="animation-delay: {{ 1.5 + loop.index0 * 0.1 }}s" />
+    {% endfor %}
+
+    {% for x, y, r in fruit_slots[:tree_state.fruit_count] %}
+    <circle class="tree-fruit" cx="{{ x }}" cy="{{ y }}" r="{{ r }}" style="animation-delay: {{ 1.9 + loop.index0 * 0.1 }}s" />
+    {% endfor %}
+  </g>
+
+  {% for path in bird_slots[:tree_state.bird_count] %}
+  <path class="tree-bird" d="{{ path }}" style="animation-delay: {{ 2.3 + loop.index0 * 0.1 }}s" />
+  {% endfor %}
+</svg>

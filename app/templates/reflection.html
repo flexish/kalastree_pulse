@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Today's Reflection · {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/reflection.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="loading-overlay" id="loading-overlay" aria-hidden="true">
+  <div class="loading-overlay__content">
+    <span class="loading-overlay__tree" aria-hidden="true">🌱</span>
+    <p>Recording today's reflection…</p>
+  </div>
+</div>
+
+<form class="reflect" method="post" action="/reflection" novalidate>
+  <section class="reflect__card glass">
+    <h1 class="reflect__title">How much did Kalastree move forward today?</h1>
+
+    <div class="reflect__slider-wrap">
+      <span class="reflect__emoji" id="rating-emoji" aria-hidden="true">🙂</span>
+      <input
+        class="reflect__slider"
+        type="range"
+        id="rating"
+        name="rating"
+        min="1"
+        max="10"
+        step="1"
+        value="{{ values.rating or 6 }}"
+      />
+      <div class="reflect__slider-scale" aria-hidden="true">
+        <span>1</span>
+        <span>10</span>
+      </div>
+      <p class="reflect__slider-label" id="rating-label">Good progress</p>
+    </div>
+  </section>
+
+  <section class="reflect__card glass">
+    <div class="reflect__field">
+      <label for="reason">Why that number?</label>
+      <textarea
+        id="reason"
+        name="reason"
+        rows="2"
+        class="{% if errors.reason %}has-error{% endif %}"
+        placeholder="What shaped today's rating?"
+      >{{ values.reason or '' }}</textarea>
+      {% if errors.reason %}<p class="reflect__error">{{ errors.reason }}</p>{% endif %}
+    </div>
+
+    <div class="reflect__field">
+      <label for="biggest_win">Biggest win today</label>
+      <textarea
+        id="biggest_win"
+        name="biggest_win"
+        rows="2"
+        class="{% if errors.biggest_win %}has-error{% endif %}"
+        placeholder="What went right?"
+      >{{ values.biggest_win or '' }}</textarea>
+      {% if errors.biggest_win %}<p class="reflect__error">{{ errors.biggest_win }}</p>{% endif %}
+    </div>
+
+    <div class="reflect__field">
+      <label for="biggest_blocker">Biggest blocker right now</label>
+      <textarea
+        id="biggest_blocker"
+        name="biggest_blocker"
+        rows="2"
+        class="{% if errors.biggest_blocker %}has-error{% endif %}"
+        placeholder="What's slowing you down?"
+      >{{ values.biggest_blocker or '' }}</textarea>
+      {% if errors.biggest_blocker %}<p class="reflect__error">{{ errors.biggest_blocker }}</p>{% endif %}
+    </div>
+
+    <div class="reflect__field">
+      <label for="tomorrow_priority">Tomorrow's #1 priority</label>
+      <textarea
+        id="tomorrow_priority"
+        name="tomorrow_priority"
+        rows="2"
+        class="{% if errors.tomorrow_priority %}has-error{% endif %}"
+        placeholder="What matters most tomorrow?"
+      >{{ values.tomorrow_priority or '' }}</textarea>
+      {% if errors.tomorrow_priority %}<p class="reflect__error">{{ errors.tomorrow_priority }}</p>{% endif %}
+    </div>
+
+    <div class="reflect__field">
+      <label for="need_help">Where do you need help?</label>
+      <textarea
+        id="need_help"
+        name="need_help"
+        rows="2"
+        class="{% if errors.need_help %}has-error{% endif %}"
+        placeholder="Be specific — or write 'nothing right now'"
+      >{{ values.need_help or '' }}</textarea>
+      {% if errors.need_help %}<p class="reflect__error">{{ errors.need_help }}</p>{% endif %}
+    </div>
+
+    <div class="reflect__field">
+      <label for="suggestions">Suggestions for the team</label>
+      <textarea
+        id="suggestions"
+        name="suggestions"
+        rows="2"
+        class="{% if errors.suggestions %}has-error{% endif %}"
+        placeholder="Anything we should try or change?"
+      >{{ values.suggestions or '' }}</textarea>
+      {% if errors.suggestions %}<p class="reflect__error">{{ errors.suggestions }}</p>{% endif %}
+    </div>
+  </section>
+
+  <button class="btn btn--primary reflect__submit" type="submit">
+    Submit today's reflection
+  </button>
+</form>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', path='js/reflection.js') }}" defer></script>
+{% endblock %}

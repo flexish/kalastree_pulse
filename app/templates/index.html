@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block body_class %}has-animated-bg{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+  <section class="dashboard__intro glass">
+    <div>
+      <p class="dashboard__greeting">{{ greeting }}, {{ user_name }} 👋</p>
+      <p class="dashboard__date">{{ today_display }}</p>
+    </div>
+    <blockquote class="dashboard__quote">
+      <p>&ldquo;{{ quote.text }}&rdquo;</p>
+      <cite>— {{ quote.author }}</cite>
+    </blockquote>
+  </section>
+
+  {% include "partials/tree.html" %}
+
+  <section class="dashboard__mission glass">
+    <div class="dashboard__mission-header">
+      <h2>{{ mission.name }}</h2>
+      <span class="badge badge--accent">{{ mission.days_left }} days left</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-bar__fill" style="width: {{ mission.revenue_pct }}%;"></div>
+    </div>
+    <div class="dashboard__mission-figures">
+      <span>{{ mission.revenue_current_display }} raised</span>
+      <span>{{ mission.revenue_pct }}%</span>
+      <span>{{ mission.revenue_target_display }} goal</span>
+    </div>
+    <p class="dashboard__mission-deadline">Target date: {{ mission.deadline_display }}</p>
+    <a class="link-btn" href="/mission">View full Mission Dashboard →</a>
+  </section>
+
+  <section class="stat-grid">
+    <div class="stat-card glass">
+      <span class="stat-card__value">{{ "Yes" if already_reflected else "Not yet" }}</span>
+      <span class="stat-card__label">Today's check-in</span>
+      <span class="stat-card__hint">
+        {{ "Thanks for reflecting today!" if already_reflected else "Start when you're ready" }}
+      </span>
+    </div>
+    <div class="stat-card glass">
+      <span class="stat-card__value">{{ streak_days }}</span>
+      <span class="stat-card__label">Your streak</span>
+      <span class="stat-card__hint">
+        {{ "Keep it going tomorrow" if already_reflected else "Starts with your first reflection" }}
+      </span>
+    </div>
+    <div class="stat-card glass">
+      <span class="stat-card__value">{{ mission.revenue_pct }}%</span>
+      <span class="stat-card__label">Mission progress</span>
+      <span class="stat-card__hint">Toward {{ mission.name }}</span>
+    </div>
+    <div class="stat-card glass">
+      <span class="stat-card__value">{{ mission.days_left }}</span>
+      <span class="stat-card__label">Days remaining</span>
+      <span class="stat-card__hint">Until {{ mission.deadline_display }}</span>
+    </div>
+  </section>
+
+  <section class="dashboard__cta glass">
+    {% if already_reflected %}
+    <span class="dashboard__cta-icon" aria-hidden="true">✅</span>
+    <p class="dashboard__cta-prompt">You've reflected today. Thank you.</p>
+    <span class="dashboard__cta-note">Come back tomorrow for the next one.</span>
+    {% else %}
+    <p class="dashboard__cta-prompt">Ready to reflect on today?</p>
+    <a class="btn btn--primary" href="/reflection">Start Today's Reflection</a>
+    <span class="dashboard__cta-note">Takes about 2 minutes</span>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}

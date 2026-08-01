@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}AI Insights · {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', path='css/insights.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="admin">
+  <section class="admin__header glass">
+    <div>
+      <h1 class="admin__title">AI Insights</h1>
+      <p class="admin__subtitle">
+        {% if insights.has_data %}
+        {{ insights.period_label }} ·
+        {% if insights.provider_used == "none" %}
+        Built-in insights (no AI provider configured)
+        {% else %}
+        Powered by {{ insights.provider_used|capitalize }}
+        {% endif %}
+        {% else %}
+        No reflections recorded yet.
+        {% endif %}
+      </p>
+    </div>
+    <a class="link-btn" href="/admin">← Back to admin</a>
+  </section>
+
+  {% if not insights.has_data %}
+  <section class="admin__empty glass">
+    <span class="admin__empty-icon" aria-hidden="true">🤖</span>
+    <h2>No data yet</h2>
+    <p>
+      Insights appear here once reflections start coming in through a
+      connected Google Sheet.
+    </p>
+  </section>
+  {% else %}
+
+  <section class="admin__card glass">
+    <h2 class="admin__card-title">Executive Summary</h2>
+    <p class="insights__summary">{{ insights.executive_summary }}</p>
+  </section>
+
+  <section class="stat-grid">
+    <div class="stat-card glass insights__momentum">
+      <span class="stat-card__label">Company Momentum Score</span>
+      <span class="stat-card__value">{{ insights.momentum_score }}<span class="insights__momentum-max">/100</span></span>
+      <div class="insights__momentum-breakdown">
+        {% for label, value in insights.momentum_breakdown.items() %}
+        <div class="insights__momentum-row">
+          <span>{{ label }}</span>
+          <span>{{ value }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="stat-card glass">
+      <span class="stat-card__label">Team Sentiment</span>
+      <span class="stat-card__value">{{ insights.sentiment_emoji }} {{ insights.sentiment_label }}</span>
+      <span class="stat-card__hint">Based on this week's average rating</span>
+    </div>
+  </section>
+
+  <div class="admin__ranked-grid">
+    <section class="admin__card glass">
+      <h2 class="admin__card-title">📈 Positive Trends</h2>
+      {% if insights.positive_trends %}
+      <ul class="insights__trend-list">
+        {% for trend in insights.positive_trends %}
+        <li>{{ trend }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="admin__card-empty">Nothing notable this week.</p>
+      {% endif %}
+    </section>
+
+    <section class="admin__card glass">
+      <h2 class="admin__card-title">📉 Negative Trends</h2>
+      {% if insights.negative_trends %}
+      <ul class="insights__trend-list">
+        {% for trend in insights.negative_trends %}
+        <li>{{ trend }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="admin__card-empty">Nothing notable this week.</p>
+      {% endif %}
+    </section>
+  </div>
+
+  <section class="admin__card glass">
+    <h2 class="admin__card-title">Recommendations</h2>
+    <ul class="insights__trend-list">
+      {% for rec in insights.recommendations %}
+      <li>{{ rec }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <div class="admin__ranked-grid">
+    <section class="admin__card glass">
+      <h2 class="admin__card-title">Top Wins</h2>
+      {% if insights.top_wins %}
+      <ol class="ranked-list">
+        {% for text, count in insights.top_wins %}
+        <li class="ranked-list__item">
+          <span class="ranked-list__text">{{ text }}</span>
+          {% if count > 1 %}<span class="badge badge--accent">×{{ count }}</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <p class="admin__card-empty">Nothing recorded in the last 30 days.</p>
+      {% endif %}
+    </section>
+
+    <section class="admin__card glass">
+      <h2 class="admin__card-title">Top Blockers</h2>
+      {% if insights.top_blockers %}
+      <ol class="ranked-list">
+        {% for text, count in insights.top_blockers %}
+        <li class="ranked-list__item">
+          <span class="ranked-list__text">{{ text }}</span>
+          {% if count > 1 %}<span class="badge badge--accent">×{{ count }}</span>{% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <p class="admin__card-empty">Nothing recorded in the last 30 days.</p>
+      {% endif %}
+    </section>
+
+    <section class="admin__card glass">
+      <h2 class="admin__card-title">Recurring Issues</h2>
+      <p class="insights__card-note">Mentioned on 2+ separate days, not just repeated once.</p>
+      {% if insights.recurring_issues %}
+      <ol class="ranked-list">
+        {% for text, days in insights.recurring_issues %}
+        <li class="ranked-list__item">
+          <span class="ranked-list__text">{{ text }}</span>
+          <span class="badge badge--accent">{{ days }} days</span>
+        </li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <p class="admin__card-empty">Nothing recurring in the last 30 days.</p>
+      {% endif %}
+    </section>
+  </div>
+
+  {% endif %}
+
+  <section class="admin__card glass">
+    <h2 class="admin__card-title">AI Provider</h2>
+    <p class="insights__card-note">
+      Insights above are computed directly from reflection data — no AI
+      provider is required. These are architecture placeholders for
+      future LLM-enhanced summaries.
+    </p>
+    <ul class="insights__provider-list">
+      <li>
+        <span>OpenAI</span>
+        <span class="badge {% if insights.provider_used == 'openai' %}badge--accent{% endif %}">
+          {{ "active" if insights.provider_used == "openai" else "not configured" }}
+        </span>
+      </li>
+      <li>
+        <span>Claude</span>
+        <span class="badge {% if insights.provider_used == 'claude' %}badge--accent{% endif %}">
+          {{ "active" if insights.provider_used == "claude" else "not configured" }}
+        </span>
+      </li>
+      <li>
+        <span>Gemini</span>
+        <span class="badge {% if insights.provider_used == 'gemini' %}badge--accent{% endif %}">
+          {{ "active" if insights.provider_used == "gemini" else "not configured" }}
+        </span>
+      </li>
+    </ul>
+  </section>
+</div>
+{% endblock %}

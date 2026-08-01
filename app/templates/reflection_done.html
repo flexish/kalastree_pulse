@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Already reflected · {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/reflection.css') }}" />
+{% endblock %}
+
+{% block content %}
+<section class="reflect-status glass">
+  <span class="reflect-status__icon" aria-hidden="true">🌿</span>
+  <h1>You've already reflected today, {{ user_name }}.</h1>
+  <p>Thanks for showing up. Come back tomorrow for the next one.</p>
+  <a class="btn btn--primary" href="/">Back to dashboard</a>
+</section>
+{% endblock %}

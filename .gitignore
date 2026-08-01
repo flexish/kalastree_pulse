@@ -1,0 +1,23 @@
+# Environment
+.env
+.env.yaml
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Logs
+logs/*.log*
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Google Sheets service account key — never commit this
+credentials/*.json

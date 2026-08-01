@@ -1,0 +1,444 @@
+/* ==========================================================================
+   Kalastree Pulse — base stylesheet
+   Design language: soft gradients, glassmorphism, generous rounding.
+   This file holds the reset + design tokens + shared layout shell that every
+   later phase builds on top of. Page-specific styles get their own file.
+   ========================================================================== */
+
+/* --- Reset ---------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* --- Accessibility ----------------------------------------------------------- */
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: var(--space-3);
+  z-index: 300;
+  background: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: var(--space-3);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* --- Design tokens ---------------------------------------------------------
+   Every color a component needs is a variable here, specifically so
+   Phase 12's dark mode is a second block of variable values, not a
+   restyle of every component. `--color-border` / `--color-border-subtle` /
+   `--color-border-strong` / `--color-input-bg` exist so the many small
+   rgba(24,24,40,...) borders and input backgrounds scattered across
+   auth.css / reflection.css / analytics.css / admin.css / dashboard.css /
+   insights.css all flip with the theme instead of staying light-mode-only. */
+:root {
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+
+  --color-bg-from: #eef4ff;
+  --color-bg-via: #f3f0ff;
+  --color-bg-to: #eafff3;
+
+  --color-text: #1a1d29;
+  --color-text-muted: #5b5f73;
+  --color-text-faint: #8a8fa3;
+
+  --color-surface: rgba(255, 255, 255, 0.6);
+  --color-surface-border: rgba(255, 255, 255, 0.8);
+
+  --color-border: rgba(24, 24, 40, 0.08);
+  --color-border-subtle: rgba(24, 24, 40, 0.06);
+  --color-border-strong: rgba(24, 24, 40, 0.12);
+  --color-input-bg: rgba(255, 255, 255, 0.8);
+
+  --color-primary: #22c55e;
+  --color-primary-dark: #16a34a;
+  --color-accent: #6366f1;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+
+  --shadow-md: 0 8px 30px rgba(24, 24, 40, 0.08);
+  --shadow-lg: 0 20px 60px rgba(24, 24, 40, 0.12);
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 48px;
+
+  color-scheme: light;
+}
+
+/* Explicit attribute, not a media query — set synchronously by an inline
+   script in base.html's <head> (before any CSS paints) from localStorage
+   or, on a first visit, the OS preference. That avoids a flash of the
+   wrong theme and means there's exactly one place dark values live. */
+[data-theme="dark"] {
+  --color-bg-from: #0f1420;
+  --color-bg-via: #161022;
+  --color-bg-to: #0c1a16;
+
+  --color-text: #e8eaf0;
+  --color-text-muted: #a8adbd;
+  --color-text-faint: #767b8c;
+
+  --color-surface: rgba(30, 32, 46, 0.55);
+  --color-surface-border: rgba(255, 255, 255, 0.08);
+
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-subtle: rgba(255, 255, 255, 0.05);
+  --color-border-strong: rgba(255, 255, 255, 0.14);
+  --color-input-bg: rgba(255, 255, 255, 0.06);
+
+  --color-primary: #34d399;
+  --color-primary-dark: #10b981;
+  --color-accent: #818cf8;
+
+  color-scheme: dark;
+}
+
+/* --- Base layout ------------------------------------------------------------ */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: linear-gradient(
+    135deg,
+    var(--color-bg-from) 0%,
+    var(--color-bg-via) 50%,
+    var(--color-bg-to) 100%
+  );
+  background-attachment: fixed;
+  opacity: 0;
+  animation: fade-in 0.5s ease forwards;
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+.glass {
+  background: var(--color-surface);
+  border: 1px solid var(--color-surface-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* --- Header ------------------------------------------------------------- */
+.site-header {
+  padding: var(--space-4) var(--space-5);
+}
+
+.site-header__inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.brand__mark {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.brand__name {
+  font-weight: 700;
+  font-size: 1.125rem;
+  letter-spacing: -0.01em;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.badge--env {
+  background: rgba(99, 102, 241, 0.12);
+  color: var(--color-accent);
+}
+
+.header__right {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-border);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.08);
+  background: var(--color-border-strong);
+}
+
+@media (max-width: 640px) {
+  .site-header__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .header__right {
+    gap: var(--space-2) var(--space-3);
+  }
+}
+
+.header__user {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.header__logout-form {
+  display: inline-flex;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-faint);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.link-btn:hover {
+  color: var(--color-text);
+}
+
+/* --- Animated background ---------------------------------------------------
+   Gated behind a body class (set via the `body_class` block) so only pages
+   that opt in — the dashboard — pay for it. */
+body.has-animated-bg::before,
+body.has-animated-bg::after {
+  content: "";
+  position: fixed;
+  inset: -10%;
+  z-index: -1;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+body.has-animated-bg::before {
+  background: radial-gradient(circle at 30% 30%, rgba(34, 197, 94, 0.35), transparent 60%);
+  animation: float-blob-a 22s ease-in-out infinite;
+}
+
+body.has-animated-bg::after {
+  background: radial-gradient(circle at 70% 70%, rgba(99, 102, 241, 0.3), transparent 60%);
+  animation: float-blob-b 26s ease-in-out infinite;
+}
+
+@keyframes float-blob-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(6%, 8%) scale(1.1);
+  }
+}
+
+@keyframes float-blob-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-8%, -6%) scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.has-animated-bg::before,
+  body.has-animated-bg::after {
+    animation: none;
+  }
+}
+
+/* --- Main ------------------------------------------------------------------ */
+.site-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-5);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-5);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.btn--primary:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* --- Keyboard shortcuts overlay --------------------------------------------- */
+.shortcuts-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 12, 20, 0.45);
+  padding: var(--space-4);
+}
+
+.shortcuts-overlay[hidden] {
+  display: none;
+}
+
+.shortcuts-overlay__card {
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  min-width: 260px;
+  max-width: 320px;
+}
+
+.shortcuts-overlay__card h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: var(--space-3);
+}
+
+.shortcuts-overlay__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.shortcuts-overlay__list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.shortcuts-overlay__list kbd {
+  min-width: 26px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* --- Footer --------------------------------------------------------------- */
+.site-footer {
+  padding: var(--space-4) var(--space-5);
+}
+
+.site-footer__inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--color-text-faint);
+}
+
+kbd {
+  background: var(--color-border);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  color: var(--color-text);
+}
+

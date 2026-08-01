@@ -1,0 +1,205 @@
+/* ==========================================================================
+   Kalastree Pulse — Mission Dashboard (the "hero page")
+   Builds on dashboard.css's .tree-card / .progress-bar. More prominent
+   typography and a staggered entrance than the home dashboard, since this
+   page's whole job is to feel like a big morning motivation screen.
+   ========================================================================== */
+
+.mission {
+  width: 100%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.mission__hero,
+.mission__revenue,
+.mission__growth-grid,
+.mission__milestones {
+  opacity: 0;
+  animation: mission-fade-up 0.6s ease forwards;
+}
+
+.mission__hero {
+  animation-delay: 0.05s;
+}
+.mission__revenue {
+  animation-delay: 0.2s;
+}
+.mission__growth-grid {
+  animation-delay: 0.35s;
+}
+.mission__milestones {
+  animation-delay: 0.5s;
+}
+
+@keyframes mission-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mission__hero,
+  .mission__revenue,
+  .mission__growth-grid,
+  .mission__milestones {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --- Hero ------------------------------------------------------------------ */
+.mission__hero {
+  border-radius: var(--radius-lg);
+  padding: var(--space-6) var(--space-5);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.mission__eyebrow {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-accent);
+}
+
+.mission__name {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.mission__countdown {
+  margin-top: var(--space-3);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+}
+
+.mission__countdown-number {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.mission__countdown-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.mission__deadline {
+  font-size: 0.85rem;
+  color: var(--color-text-faint);
+}
+
+/* --- Revenue ----------------------------------------------------------------- */
+.mission__revenue {
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.mission__revenue-figures {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.mission__figure {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mission__figure-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text-faint);
+  font-weight: 700;
+}
+
+.mission__figure-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.mission__progress-bar {
+  height: 14px;
+}
+
+.mission__completion {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+}
+
+/* --- Growth grid ------------------------------------------------------------- */
+.mission__growth-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--space-4);
+}
+
+.mission__forest-trees {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  font-size: 1.5rem;
+  max-width: 220px;
+}
+
+.mission__forest-tree--empty {
+  opacity: 0.5;
+}
+
+/* --- Milestones --------------------------------------------------------------- */
+.mission__milestones {
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.mission__milestones-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.mission__milestone-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+}
+
+.mission__milestones-empty {
+  font-size: 0.85rem;
+  color: var(--color-text-faint);
+}

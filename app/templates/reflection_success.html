@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Reflection submitted · {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/reflection.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', path='css/success.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+
+<section class="reflect-status glass">
+  <div class="success-tree" aria-hidden="true">
+    {% include "partials/tree_svg.html" %}
+  </div>
+
+  <span class="reflect-status__icon" aria-hidden="true">✅</span>
+  <h1>Thanks for reflecting today, {{ user_name }}.</h1>
+  <p class="reflect-status__message">{{ success_message }}</p>
+  <a class="btn btn--primary" href="/">Back to dashboard</a>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', path='js/success.js') }}" defer></script>
+{% endblock %}

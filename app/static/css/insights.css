@@ -1,0 +1,67 @@
+/* ==========================================================================
+   Kalastree Pulse — AI insights page
+   Builds on admin.css / dashboard.css for cards, grids, and badges.
+   ========================================================================== */
+
+.insights__summary {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+.insights__momentum-max {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-faint);
+}
+
+.insights__momentum-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: var(--space-1);
+}
+
+.insights__momentum-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--color-text-faint);
+}
+
+.insights__trend-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-size: 0.88rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.insights__card-note {
+  font-size: 0.78rem;
+  color: var(--color-text-faint);
+}
+
+.insights__provider-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.insights__provider-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.insights__provider-list .badge {
+  background: var(--color-border-subtle);
+  color: var(--color-text-faint);
+  text-transform: capitalize;
+}
