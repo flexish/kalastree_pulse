@@ -14,6 +14,7 @@ working without Sheets set up; a submitted reflection should never be lost
 just because an external API hiccupped or a team hasn't finished setup.
 """
 
+import json
 import logging
 from datetime import datetime
 from functools import lru_cache
@@ -53,6 +54,10 @@ class GoogleSheetsSettings(BaseSettings):
 
     ENABLED: bool = False
     CREDENTIALS_FILE: str = "credentials/service-account.json"
+    # Some hosts (Fly.io, unlike Render/Cloud Run) have no "mount a secret
+    # as a file" feature — this lets the whole key JSON be set as one env
+    # var instead. Takes priority over CREDENTIALS_FILE when set.
+    CREDENTIALS_JSON: str = ""
     SPREADSHEET_ID: str = ""
     WORKSHEET_NAME: str = "Reflections"
 
@@ -74,9 +79,12 @@ def is_sheets_configured() -> bool:
     if not settings.SPREADSHEET_ID:
         logger.warning("Google Sheets is enabled but GOOGLE_SHEETS_SPREADSHEET_ID is not set")
         return False
+    if settings.CREDENTIALS_JSON:
+        return True
     if not _resolve_credentials_path(settings.CREDENTIALS_FILE).exists():
         logger.warning(
-            "Google Sheets is enabled but the credentials file was not found: %s",
+            "Google Sheets is enabled but neither GOOGLE_SHEETS_CREDENTIALS_JSON nor the "
+            "credentials file was found: %s",
             _resolve_credentials_path(settings.CREDENTIALS_FILE),
         )
         return False
@@ -89,6 +97,10 @@ def _get_client() -> gspread.Client | None:
         return None
     settings = get_sheets_settings()
     try:
+        if settings.CREDENTIALS_JSON:
+            return gspread.service_account_from_dict(
+                json.loads(settings.CREDENTIALS_JSON), scopes=_SCOPES
+            )
         return gspread.service_account(
             filename=str(_resolve_credentials_path(settings.CREDENTIALS_FILE)),
             scopes=_SCOPES,
