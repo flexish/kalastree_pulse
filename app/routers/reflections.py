@@ -6,9 +6,10 @@ Phase 4 built the form, its validation, and the service seam
 the animated growing-tree / confetti experience to `reflection_success.html`
 on top of that — validation and the service call are unchanged.
 
-"Already reflected today" is tracked in the session (`last_reflection_date`)
-since there's no persistence layer yet — it resets naturally the next
-calendar day, or on logout, until Phase 6 gives it a durable home.
+"Already reflected today" is tracked in the session as `last_reflection`
+(`{"user": ..., "date": ...}`), keyed by name rather than just a date, so
+it can't leak onto a different person who signs in on the same device —
+see `_already_reflected_today`.
 """
 
 import logging
@@ -33,7 +34,11 @@ router = APIRouter(tags=["reflection"])
 
 
 def _already_reflected_today(request: Request) -> bool:
-    return request.session.get("last_reflection_date") == date.today().isoformat()
+    last = request.session.get("last_reflection") or {}
+    return (
+        last.get("user") == request.session.get("user_name")
+        and last.get("date") == date.today().isoformat()
+    )
 
 
 @router.get("/reflection")
@@ -81,7 +86,7 @@ async def reflection_submit(
         return render_template(request, "reflection.html", values=raw, errors=errors)
 
     submit_reflection(user_name=user_name, form=form)
-    request.session["last_reflection_date"] = date.today().isoformat()
+    request.session["last_reflection"] = {"user": user_name, "date": date.today().isoformat()}
     logger.info("Reflection recorded for '%s'", user_name)
     return render_template(
         request,

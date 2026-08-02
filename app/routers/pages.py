@@ -33,7 +33,11 @@ async def homepage(request: Request):
         return RedirectResponse(url="/login", status_code=303)
 
     now = datetime.now()
-    already_reflected = request.session.get("last_reflection_date") == now.date().isoformat()
+    last = request.session.get("last_reflection") or {}
+    already_reflected = (
+        last.get("user") == request.session.get("user_name")
+        and last.get("date") == now.date().isoformat()
+    )
 
     return render_template(
         request,

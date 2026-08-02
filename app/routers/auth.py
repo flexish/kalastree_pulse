@@ -73,6 +73,13 @@ async def login_submit(request: Request, name: Annotated[str, Form()]):
             )
         signed_in_name = matched_name
 
+    # Admin status must never carry over to whoever signs in next on a
+    # shared device — it's the one session flag that's a real privilege,
+    # not just UI state. `last_reflection` (below) is left alone: it's
+    # already keyed by name, so it self-corrects for a *different* person
+    # and still correctly says "already reflected" if the same person logs
+    # back in later the same day.
+    request.session.pop("is_admin", None)
     request.session["user_name"] = signed_in_name
     logger.info("User '%s' signed in", signed_in_name)
     return RedirectResponse(url="/", status_code=303)
@@ -81,6 +88,7 @@ async def login_submit(request: Request, name: Annotated[str, Form()]):
 @router.post("/logout")
 async def logout(request: Request):
     user_name = request.session.pop("user_name", None)
+    request.session.pop("is_admin", None)
     if user_name:
         logger.info("User '%s' signed out", user_name)
     return RedirectResponse(url="/login", status_code=303)
