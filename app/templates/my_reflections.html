@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}My Reflections · {{ app_name }}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}" />
+<link rel="stylesheet" href="{{ url_for('static', path='css/my_reflections.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="my-reflections">
+  <section class="admin__header glass">
+    <div>
+      <h1 class="admin__title">My Reflections</h1>
+      <p class="admin__subtitle">
+        {% if reflections %}
+        Your last {{ reflections|length }} check-in{{ "s" if reflections|length != 1 else "" }}. Fix a typo or an
+        outdated answer any time.
+        {% else %}
+        Nothing recorded yet — your submissions will show up here.
+        {% endif %}
+      </p>
+    </div>
+    <a class="link-btn" href="/">&larr; Dashboard</a>
+  </section>
+
+  {% if updated %}
+  <p class="my-reflections__banner" role="status">Saved — your reflection was updated.</p>
+  {% endif %}
+
+  {% if not reflections %}
+  <section class="admin__empty glass">
+    <span class="admin__empty-icon" aria-hidden="true">📝</span>
+    <h2>No reflections yet</h2>
+    <p>Once you submit your first check-in, it'll appear here for you to review or edit.</p>
+    <a class="btn btn--primary" href="/reflection">Start today's reflection</a>
+  </section>
+  {% else %}
+  <ul class="my-reflections__list">
+    {% for r in reflections %}
+    <li class="my-reflections__item glass">
+      <div class="my-reflections__meta">
+        <span class="my-reflections__date">{{ r.timestamp.strftime("%a, %b") }} {{ r.timestamp.day }}, {{ r.timestamp.year }}</span>
+        <span class="badge badge--accent">{{ r.rating }}/10</span>
+      </div>
+      <p class="my-reflections__text">{{ r.reason }}</p>
+      <a class="link-btn" href="/reflections/{{ r.row_number }}/edit">Edit →</a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endblock %}

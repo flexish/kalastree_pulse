@@ -139,6 +139,47 @@ def get_worksheet() -> gspread.Worksheet | None:
         return None
 
 
+def update_reflection_row(
+    *,
+    row_number: int,
+    rating: int,
+    reason: str,
+    biggest_win: str,
+    biggest_blocker: str,
+    tomorrow_priority: str,
+    need_help: str,
+    suggestions: str,
+) -> bool:
+    """Overwrite an existing row's editable columns (C:I — rating through
+    suggestions). Timestamp and Name (A:B) are left untouched; a row is
+    identified by its sheet position, so the caller must have already
+    confirmed that position still belongs to the record it thinks it does
+    (row numbers shift if someone deletes a row in the sheet directly)."""
+    worksheet = get_worksheet()
+    if worksheet is None:
+        return False
+
+    try:
+        worksheet.update(
+            range_name=f"C{row_number}:I{row_number}",
+            values=[
+                [
+                    rating,
+                    reason,
+                    biggest_win,
+                    biggest_blocker,
+                    tomorrow_priority,
+                    need_help,
+                    suggestions,
+                ]
+            ],
+        )
+        return True
+    except Exception:
+        logger.exception("Failed to update reflection row %s in Google Sheets", row_number)
+        return False
+
+
 def append_reflection_row(
     *,
     timestamp: datetime,

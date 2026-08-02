@@ -59,6 +59,9 @@ class ReflectionRecord:
     tomorrow_priority: str
     need_help: str
     suggestions: str
+    # 1-indexed sheet row (header is row 1) — lets the edit flow write back
+    # to the exact row it read from instead of re-matching by content.
+    row_number: int = 0
 
 
 @dataclass
@@ -93,7 +96,7 @@ def get_all_reflections() -> list[ReflectionRecord]:
         return []
 
     records: list[ReflectionRecord] = []
-    for row in rows[1:]:  # skip header
+    for sheet_row, row in enumerate(rows[1:], start=2):  # skip header; sheet rows are 1-indexed
         if len(row) < 9:
             continue
         try:
@@ -112,9 +115,27 @@ def get_all_reflections() -> list[ReflectionRecord]:
                 tomorrow_priority=row[6],
                 need_help=row[7],
                 suggestions=row[8],
+                row_number=sheet_row,
             )
         )
     return records
+
+
+def get_user_reflections(user_name: str, limit: int = 30) -> list[ReflectionRecord]:
+    """Most-recent-first history for one person, for the "My Reflections"
+    edit flow. Matched case-insensitively since that's how login/roster
+    matching already treats names elsewhere in the app."""
+    needle = user_name.strip().lower()
+    records = [r for r in get_all_reflections() if r.name.strip().lower() == needle]
+    records.sort(key=lambda r: r.timestamp, reverse=True)
+    return records[:limit]
+
+
+def get_reflection_by_row(row_number: int) -> ReflectionRecord | None:
+    for record in get_all_reflections():
+        if record.row_number == row_number:
+            return record
+    return None
 
 
 def avg_rating(records: list[ReflectionRecord]) -> float | None:
